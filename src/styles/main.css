@@ -1,0 +1,933 @@
+/* ==========================================================================
+   Design tokens. Glassmorphism + minimal. Tints drawn from the background
+   (rose, lavender, sunflower gold).
+   ========================================================================== */
+:root {
+  --bg-image: url("/assets/background.jpg");
+  --ink: #4a2a3c;
+  --ink-soft: rgba(74, 42, 60, 0.68);
+  --rose: #e0729a;
+  --rose-deep: #c9477a;
+  --rose-tint: rgba(224, 114, 154, 0.22);
+
+  /* Glass layers */
+  --glass-fill: rgba(255, 255, 255, 0.28);
+  --glass-fill-strong: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-blur: blur(20px) saturate(140%);
+  --glass-shadow: 0 10px 40px rgba(110, 40, 80, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  --radius-lg: 32px;
+  --radius-md: 20px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(0.22, 0.9, 0.3, 1.08);
+
+  /* Set by cursor.js: a rose drawn as an SVG cursor */
+  --rose-cursor: auto;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #f3d9e8 center / cover fixed no-repeat;
+  background-image: var(--bg-image);
+  color: var(--ink);
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Rose cursor everywhere (set in cursor.js). */
+  cursor: var(--rose-cursor), auto;
+}
+
+/* Light veil keeps the glass readable over any part of the art. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.08), rgba(90, 30, 60, 0.18));
+  pointer-events: none;
+  z-index: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: var(--rose-cursor), pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--rose-tint);
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 16px side gutter + safe areas for notched phones */
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: 32px 24px 28px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Soft sheen across the top of the glass pane */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
+}
+
+.card > * {
+  position: relative;
+}
+
+.screen {
+  animation: fade-in 0.6s ease both;
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   Cat GIF frame: fixed box so swapping GIFs never shifts the layout.
+   ========================================================================== */
+.cat-frame {
+  position: relative;
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto 18px;
+  border-radius: 24px;
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 20px rgba(110, 40, 80, 0.12);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.cat-frame-sm {
+  max-width: 140px;
+  margin-bottom: 12px;
+}
+
+.cat {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cat-fallback {
+  font-size: 56px;
+  line-height: 1;
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.question {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 6vw, 2.05rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* ==========================================================================
+   Proposal stage: the NO button is positioned inside this box only.
+   ========================================================================== */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  margin-top: 8px;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 13px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: var(--rose-cursor), pointer;
+  min-height: 48px;
+  min-width: 48px;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s ease, background-color 0.25s ease;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+  transform: none;
+}
+
+/* Both buttons are placed with explicit left/top by main.js (layoutButtons). */
+.btn-yes {
+  position: absolute;
+  background: rgba(224, 114, 154, 0.85);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(201, 71, 122, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.btn-yes:hover {
+  background: rgba(224, 114, 154, 1);
+}
+
+.btn-no {
+  position: absolute;
+  background: var(--glass-fill-strong);
+  color: var(--ink);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(110, 40, 80, 0.14);
+  /* Position changes glide; the pop animation handles the goofy bit. */
+  transition: left 0.42s var(--ease), top 0.42s var(--ease), background-color 0.2s ease;
+  z-index: 2;
+}
+
+.btn-no:hover {
+  transform: translateY(-2px);
+}
+
+.btn-no.is-pop {
+  animation: pop 0.55s var(--ease);
+}
+
+.btn-no.is-teleport {
+  animation: teleport 0.7s ease;
+}
+
+.btn-no.is-evading {
+  transition: left 0.2s ease-out, top 0.2s ease-out;
+}
+
+/* Sparkles that appear on the 3rd NO click */
+.sparkle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 16px;
+  animation: sparkle-out 0.9s ease-out forwards;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   Secondary buttons (patience / accepted screens)
+   ========================================================================== */
+.link-btn {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  padding: 12px;
+  min-height: 48px;
+  font-size: 0.9rem;
+}
+
+.patience-message {
+  margin: 0;
+  font-size: clamp(1.2rem, 4.4vw, 1.5rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: balance;
+  padding: 0 4px;
+}
+
+/* ==========================================================================
+   Accepted / celebration screen
+   ========================================================================== */
+.celebration-heading {
+  margin: 0 0 8px;
+  font-size: clamp(1.7rem, 7vw, 2.3rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--rose-deep);
+  text-wrap: balance;
+  animation: pop-in 0.7s var(--ease) both;
+}
+
+.celebration-sub {
+  margin: 0 0 22px;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.action-btn {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon title"
+    "icon desc";
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 2px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 18px;
+  text-align: left;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-fill);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: 0 6px 20px rgba(110, 40, 80, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  cursor: var(--rose-cursor), pointer;
+  transition: transform 0.25s var(--ease), background-color 0.25s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+  background: var(--glass-fill-strong);
+}
+
+.action-icon {
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--rose-deep);
+}
+
+.action-title {
+  grid-area: title;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.action-desc {
+  grid-area: desc;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ==========================================================================
+   Modal shell (gallery, letter, gift)
+   ========================================================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  animation: fade-in 0.3s ease both;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(60, 20, 45, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100dvh - 24px);
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px rgba(60, 20, 45, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  overflow: hidden;
+  animation: pop-in 0.45s var(--ease) both;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: var(--glass-fill-strong);
+  color: var(--ink);
+  font-size: 0.9rem;
+  cursor: var(--rose-cursor), pointer;
+}
+
+.icon-btn:hover {
+  background: #fff;
+}
+
+.modal-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px 22px 22px;
+  overscroll-behavior: contain;
+}
+
+/* --- Gallery --- */
+.gallery-stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.gallery-stage img {
+  width: 100%;
+  height: 100%;
+  /* Show the whole photo; portrait shots get side padding instead of being cut. */
+  object-fit: contain;
+}
+
+.gallery-placeholder {
+  padding: 16px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.gallery-placeholder strong {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+
+.gallery-caption {
+  min-height: 3em;
+  margin: 14px 0 8px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  text-align: center;
+}
+
+.gallery-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gallery-count {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.nav-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-fill-strong);
+  cursor: var(--rose-cursor), pointer;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.nav-btn:hover {
+  background: #fff;
+}
+
+/* --- Letter --- */
+.letter-paper {
+  position: relative;
+  padding: 26px 24px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--glass-border);
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--ink);
+  animation: unfold 0.8s ease both;
+}
+
+.letter-paper p {
+  margin: 0 0 1em;
+  white-space: pre-line;
+}
+
+.letter-close {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-soft {
+  min-height: 46px;
+  padding: 12px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-pill);
+  background: rgba(224, 114, 154, 0.85);
+  color: #fff;
+  font-weight: 500;
+  cursor: var(--rose-cursor), pointer;
+  box-shadow: 0 8px 20px rgba(201, 71, 122, 0.28);
+}
+
+/* --- Gift --- */
+.gift-wrap {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.gift-box {
+  position: relative;
+  width: 170px;
+  height: 150px;
+  border: none;
+  background: none;
+  cursor: var(--rose-cursor), pointer;
+  padding: 0;
+}
+
+.gift-base,
+.gift-lid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 20px rgba(110, 40, 80, 0.14);
+}
+
+.gift-base {
+  bottom: 0;
+  height: 104px;
+}
+
+.gift-lid {
+  top: 20px;
+  height: 34px;
+  transform-origin: left bottom;
+  transition: transform 0.6s var(--ease);
+}
+
+.gift-base::after,
+.gift-lid::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  transform: translateX(-50%);
+  background: rgba(224, 114, 154, 0.7);
+}
+
+.gift-box.is-open .gift-lid {
+  transform: translateY(-44px) rotate(-18deg);
+}
+
+.gift-box:not(.is-open):hover .gift-lid {
+  transform: rotate(-4deg);
+}
+
+.gift-reveal {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  animation: pop-in 0.6s var(--ease) both;
+}
+
+.gift-reveal img {
+  max-height: 260px;
+  width: auto;
+  border-radius: var(--radius-md);
+}
+
+.gift-fallback-card {
+  width: 100%;
+  padding: 26px 18px;
+  border-radius: var(--radius-md);
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-border);
+  font-weight: 300;
+  font-size: 1.02rem;
+}
+
+.gift-fallback-card span {
+  display: block;
+  font-size: 2.6rem;
+  margin-bottom: 6px;
+}
+
+.gift-message {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Background canvas (rose petals) and confetti
+   ========================================================================== */
+.petals {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.confetti {
+  position: fixed;
+  top: -20px;
+  z-index: 20;
+  width: 9px;
+  height: 13px;
+  border-radius: 50% 0 50% 0;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+/* ==========================================================================
+   Gift surprise: fireworks + rose + message (see components/surprise.js)
+   ========================================================================== */
+.surprise {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 45%, rgba(255, 220, 235, 0.35), rgba(60, 20, 45, 0.45));
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  cursor: var(--rose-cursor), pointer;
+  animation: fade-in 0.4s ease both;
+  transition: opacity 0.5s ease;
+}
+
+.surprise.is-leaving {
+  opacity: 0;
+}
+
+.surprise-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.surprise-content {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.surprise-rose {
+  width: 180px;
+  height: 180px;
+  filter: drop-shadow(0 10px 24px rgba(201, 71, 122, 0.45));
+  animation: rose-pop 1s var(--ease) both;
+}
+
+.surprise-rose svg {
+  width: 100%;
+  height: 100%;
+}
+
+.surprise-text {
+  margin: 0;
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 4px 22px rgba(120, 30, 70, 0.55);
+  animation: rise-in 0.9s 0.4s var(--ease) both;
+}
+
+/* ==========================================================================
+   Keyframes
+   ========================================================================== */
+@keyframes rose-pop {
+  0% { opacity: 0; transform: scale(0.2) rotate(-60deg); }
+  70% { opacity: 1; transform: scale(1.12) rotate(8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.88); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* The goofy "pop": squash, overshoot, and a little spin on every dodge */
+@keyframes pop {
+  0% { scale: 0.6; rotate: -14deg; }
+  55% { scale: 1.14; rotate: 9deg; }
+  80% { scale: 0.96; rotate: -3deg; }
+  100% { scale: 1; rotate: 0deg; }
+}
+
+@keyframes teleport {
+  0% { opacity: 1; scale: 1; filter: none; }
+  40% { opacity: 0; scale: 0.4; filter: blur(4px); }
+  60% { opacity: 0; scale: 0.4; }
+  100% { opacity: 1; scale: 1; filter: none; }
+}
+
+@keyframes sparkle-out {
+  0% { opacity: 1; transform: translate(0, 0) scale(0.5); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.4); }
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.9; }
+}
+
+/* ==========================================================================
+   Responsive: wider screens get the three actions in a row.
+   ========================================================================== */
+@media (min-width: 640px) {
+  .card {
+    padding: 40px 36px 34px;
+  }
+
+  .stage {
+    height: 200px;
+  }
+
+  .action-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .action-btn {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "icon"
+      "title"
+      "desc";
+    justify-items: center;
+    text-align: center;
+    row-gap: 6px;
+    padding: 18px 12px;
+  }
+}
+
+/* Short screens (landscape phones): tighten vertical spacing so the whole proposal fits. */
+@media (max-height: 500px) {
+  .app {
+    align-items: center;
+  }
+
+  .card {
+    padding: 18px 22px 16px;
+  }
+
+  .cat-frame {
+    max-width: 110px;
+    margin-bottom: 8px;
+  }
+
+  .cat-frame-sm {
+    max-width: 96px;
+  }
+
+  .question {
+    font-size: 1.45rem;
+  }
+
+  .stage {
+    height: 130px;
+  }
+
+  .celebration-sub {
+    margin-bottom: 12px;
+  }
+
+  .action-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .action-btn {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "icon"
+      "title"
+      "desc";
+    justify-items: center;
+    text-align: center;
+    row-gap: 4px;
+    padding: 10px 8px;
+    min-height: 0;
+  }
+
+  .action-desc {
+    display: none;
+  }
+}
+
+/* Narrow phones: keep the NO button comfortably sized. */
+@media (max-width: 360px) {
+  .btn {
+    padding: 12px 22px;
+    font-size: 0.95rem;
+  }
+
+  .stage {
+    height: 170px;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion: keep the content, drop the movement.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cat-fallback {
+    animation: none;
+  }
+
+  .petals,
+  .confetti {
+    display: none;
+  }
+}

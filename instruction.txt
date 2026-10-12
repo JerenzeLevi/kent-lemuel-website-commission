@@ -1,0 +1,389 @@
+# WEBSITE COMMISSION MASTER PROMPT
+
+## Interactive Romantic Proposal Website
+
+### 1. Project Overview
+
+Create a cute, romantic, interactive, and fully responsive proposal website for someone who wants to ask a special person an important question.
+
+The website should feel personal, charming, playful, and emotionally meaningful. It should not look like a generic template. The experience should have a clear beginning, a playful interactive proposal, and a heartfelt ending if the recipient chooses YES.
+
+**Important:** I already have the background image. Use a placeholder path for it so I can replace it with my own asset. Do not generate or substitute a different background image. Also, create clearly labeled placeholders for the cat GIFs, which I will provide later.
+
+### 2. Technology and Requirements
+
+* Build a functional website using HTML, CSS, and JavaScript, or React with Vite if a component-based implementation is more appropriate.
+* Make it compatible with modern desktop and mobile browsers.
+* Prioritize functionality, smooth animations, responsiveness, and maintainable code.
+* Do not require a backend or database.
+* Use local image assets and relative paths.
+* Include clear comments indicating where I should replace images, GIFs, names, messages, and other personalized content.
+* Ensure that all interactions work on both mouse-based and touchscreen devices.
+
+### 3. Background and Visual Design
+
+Use my existing background image as the main visual foundation.
+
+Asset placeholder:
+
+`public/assets/background.png`
+
+If using plain HTML, adjust the asset path to match the chosen project structure.
+
+Design requirements:
+
+* Display the background beautifully without unnecessary cropping.
+* Use a centered proposal card or content panel that complements the background.
+* Ensure text remains readable through appropriate contrast, subtle shadows, or a translucent panel if necessary.
+* Use a cute romantic visual style with tasteful pink, cream, white, or other colors that complement my background.
+* Include gentle floating hearts, tiny sparkles, or subtle decorative animations where appropriate.
+* Avoid excessive effects that distract from the proposal itself.
+* Keep the layout clean, polished, and emotionally engaging.
+
+### 4. Cat GIF Placeholders
+
+Reserve a dedicated image area for a cute cat GIF above the main proposal question.
+
+Create the following placeholder assets:
+
+* `public/assets/cat-idle.gif` — the initial cat animation.
+* `public/assets/cat-no.gif` — a playful or shy cat reaction when NO is clicked.
+* `public/assets/cat-yes.gif` — a happy, excited, or celebratory cat reaction when YES is clicked.
+* `public/assets/cat-celebration.gif` — an optional GIF for the successful YES screen.
+
+These are placeholders, not assets that need to be generated.
+
+If a GIF has not yet been supplied, display a graceful fallback image or placeholder without breaking the page. Keep the image container dimensions consistent to avoid layout shifts when switching GIFs.
+
+### 5. Initial Proposal Screen
+
+When the website loads, display the initial proposal screen.
+
+Content structure:
+
+1. Cat GIF placeholder.
+
+2. A short romantic heading, such as:
+
+   **"Hey, there's something I want to ask you..."**
+
+3. The main proposal question, customizable by the developer:
+
+   **"Will you give us a chance?"**
+
+   Keep the question editable because I may change the exact wording later.
+
+4. Two buttons:
+
+   * **YES 💗**
+   * **NO 🙈**
+
+Both buttons should have rounded corners, smooth hover transitions, and clear visual distinction.
+
+The initial cat GIF should change when the recipient interacts with either button.
+
+### 6. The NO Button: Playful Dodge Mechanic
+
+The NO button should behave like a playful, mischievous website element.
+
+Implement the following exact interaction sequence.
+
+**First NO click:**
+
+* Change the cat GIF to `cat-no.gif`.
+* Play a short, gentle animation.
+* Move the NO button to a different nearby position within the proposal area.
+
+**Second NO click:**
+
+* Change its position again.
+* Play a small bounce, wobble, or teleport animation.
+
+**Third NO click:**
+
+* Move the button to another valid location.
+* Add a playful visual reaction, such as a tiny shake or sparkle effect.
+
+**Fourth NO click:**
+
+* Trigger one final playful teleport animation.
+
+* Replace the proposal screen with a centered message displaying the following exact text:
+
+  "i understand, and i will remain patient for you and wait when you are readY"
+
+* Preserve the exact message, including its lowercase wording and the capitalized Y in "readY".
+
+* Make the message the emotional focus of the screen.
+
+* Optionally display the cat GIF beneath the message, using `cat-no.gif` or another configured reaction GIF.
+
+* Provide a subtle fade-in transition.
+
+Do not turn this final screen into a guilt-inducing or coercive message. The tone should remain gentle, patient, and respectful.
+
+#### Desktop cursor avoidance
+
+On desktop and laptop devices, make the NO button slightly evasive.
+
+When the cursor approaches the NO button or the user attempts to interact with it, the button may move a short distance away before the interaction completes.
+
+Requirements:
+
+* Use small, unpredictable but controlled movements.
+* Keep the button within the visible proposal area.
+* Avoid moving the entire proposal card.
+* Prevent the button from jumping outside the viewport or overlapping important text.
+* Respect reduced-motion accessibility preferences.
+* Make the behavior optional through a configuration setting.
+
+The four-click counter must remain reliable. Count actual NO button activations, not every mouse movement.
+
+The cursor-avoidance effect must not make the button impossible to interact with indefinitely. The fourth activation must reliably display the patience message.
+
+#### Mobile behavior
+
+Touchscreens do not have mouse cursors. Therefore:
+
+* Disable cursor-avoidance behavior on touch devices.
+* Move the NO button to safe positions after taps.
+* Keep the button fully visible and easy to understand.
+* Ensure that the final message appears after four NO activations.
+
+### 7. The YES Button: Proposal Accepted
+
+When YES is clicked at any point before the final NO screen:
+
+* Stop all NO-button movement and cursor-avoidance behavior.
+
+* Prevent further interaction with the original proposal buttons.
+
+* Change the cat GIF to `cat-yes.gif`.
+
+* Transition smoothly to a celebration screen.
+
+* Add tasteful hearts, confetti, or sparkles.
+
+* Display the following exact heading prominently:
+
+  **"OMG, you said yessss"**
+
+* Ensure that the message appears as actual selectable text, not as part of an image.
+
+* Use a smooth entrance animation and an optional celebratory sound effect that starts only after the user clicks YES.
+
+The accepted state should remain active unless the user deliberately returns to the proposal screen through an explicitly provided navigation control.
+
+### 8. Three Buttons on the YES Screen
+
+Below the heading "OMG, you said yessss", display three attractive, evenly spaced action buttons.
+
+Each button should include an icon, a short title, and a clear purpose.
+
+#### Button 1: Our Moments
+
+Icon: Image or photo icon.
+
+Label: **"Our Moments"**
+
+Action:
+
+* Open an elegant photo gallery or modal.
+* Display photos representing their shared moments, with a responsive grid or carousel.
+* Allow the recipient to navigate through the photos.
+* Support captions beneath individual images.
+* Provide placeholders for images and captions.
+
+Suggested asset structure:
+
+* `public/assets/moments/photo-01.jpg`
+* `public/assets/moments/photo-02.jpg`
+* `public/assets/moments/photo-03.jpg`
+
+Include a simple configuration file or clearly commented array where additional images and captions can be added.
+
+Do not invent personal memories, dates, or photographs. Use neutral placeholders until the developer supplies the actual content.
+
+#### Button 2: A Letter for You
+
+Icon: Envelope or letter icon.
+
+Label: **"A Letter for You"**
+
+Action:
+
+* Open a beautifully styled letter modal or dedicated page.
+* Use a paper-like background, elegant typography, and a subtle opening animation.
+* Display a heartfelt letter written by the proposer.
+* Make the letter content editable from a clearly identified configuration file or variable.
+* Include a gentle closing or back button.
+
+Use this placeholder until the final letter is provided:
+
+"There's something I've wanted to tell you, and I hope these words help express what you mean to me.
+
+[Insert the personal letter here.]
+
+With all my sincerity,
+[Your Name]"
+
+The developer should not invent specific promises or claim that the couple has shared experiences that have not been provided.
+
+#### Button 3: A Little Gift
+
+Icon: Gift box icon.
+
+Label: **"A Little Gift"**
+
+Action:
+
+* Open a dedicated gift reveal screen or modal.
+* Animate a gift box opening.
+* Reveal a customizable gift, image, message, or surprise.
+* Include a placeholder for the gift image or content.
+
+Suggested asset:
+
+`public/assets/gift.png`
+
+Use a placeholder message such as:
+
+"A little something, just for you. 🎁"
+
+The gift feature must work even when no gift image has been supplied. Display an attractive fallback design until the real gift is added.
+
+### 9. Navigation and Interaction Details
+
+All secondary screens and modals must include a visible close or back control.
+
+Requirements:
+
+* Closing a gallery, letter, or gift returns the recipient to the YES screen.
+* The YES state must not reset when a modal is closed.
+* The proposal screen must not reappear accidentally when interacting with secondary content.
+* Prevent duplicate modal openings and conflicting animations.
+* Keep all buttons functional.
+* Avoid dead links and placeholder buttons that do nothing.
+* Ensure that the layout does not jump or break when images fail to load.
+
+### 10. Responsive Design
+
+The website must look intentional on both desktop and mobile.
+
+Desktop:
+
+* Center the proposal content within the available viewport.
+* Keep the buttons aligned and comfortably spaced.
+* Allow the NO button to move within a defined interaction area.
+* Display the three YES-screen actions in a horizontal row when space allows.
+
+Mobile:
+
+* Use a vertically stacked layout.
+* Keep the proposal question readable without excessive scrolling.
+* Ensure that both YES and NO buttons remain accessible.
+* Stack the three action buttons vertically or use a compact grid where appropriate.
+* Make modals fit within the screen and allow scrolling for long letters.
+* Account for mobile safe areas and browser viewport changes.
+
+### 11. Accessibility and Quality
+
+* Use semantic HTML and accessible button labels.
+* Ensure keyboard navigation works.
+* Provide visible focus indicators.
+* Maintain sufficient text contrast.
+* Respect the user's reduced-motion preference.
+* Avoid flashing or excessively rapid animations.
+* Use meaningful alt text for photos and GIFs.
+* Do not rely on color alone to communicate button actions.
+* Ensure that the NO interaction remains understandable without animations.
+* Do not play audio automatically on page load.
+
+### 12. Suggested State Management
+
+Implement a clear and predictable state system.
+
+Suggested states:
+
+* `proposal` — initial proposal screen.
+* `patience` — the final screen after four NO activations.
+* `accepted` — the YES celebration screen.
+* `gallery` — the shared-moments gallery.
+* `letter` — the letter view.
+* `gift` — the gift reveal.
+
+Suggested variables:
+
+* `noClickCount` — number of NO activations.
+* `currentCatGif` — currently displayed cat GIF.
+* `currentScreen` — active screen or modal.
+* `isCelebrating` — whether the celebration animation is active.
+
+Use a single source of truth for screen transitions. Once YES is selected, ignore further NO interactions. Once the patience screen is reached, do not allow the NO counter to trigger it repeatedly.
+
+### 13. Suggested Project Structure
+
+```text
+proposal-website/
+├── public/
+│   └── assets/
+│       ├── background.png
+│       ├── cat-idle.gif
+│       ├── cat-no.gif
+│       ├── cat-yes.gif
+│       ├── cat-celebration.gif
+│       ├── gift.png
+│       └── moments/
+│           ├── photo-01.jpg
+│           ├── photo-02.jpg
+│           └── photo-03.jpg
+├── src/
+│   ├── components/
+│   │   ├── ProposalScreen
+│   │   ├── PatienceScreen
+│   │   ├── CelebrationScreen
+│   │   ├── GalleryModal
+│   │   ├── LetterModal
+│   │   └── GiftModal
+│   ├── config/
+│   │   └── content
+│   ├── styles/
+│   ├── App
+│   └── main
+├── package.json
+└── README.md
+```
+
+The exact extensions may vary depending on the chosen framework.
+
+### 14. Completion Criteria
+
+The website is not complete merely because the page looks attractive. It must pass the following tests:
+
+1. The existing background image loads from the designated path.
+2. The initial cat GIF displays correctly, or a fallback appears.
+3. The YES button always leads to the accepted screen.
+4. The accepted screen displays the exact text "OMG, you said yessss".
+5. The three buttons open the correct gallery, letter, and gift experiences.
+6. The NO button moves to safe positions on each of its first three activations.
+7. The fourth NO activation displays the exact patience message.
+8. Desktop cursor avoidance works without making the NO button permanently inaccessible.
+9. Mobile interactions work without relying on a mouse cursor.
+10. Modal closing preserves the accepted state.
+11. Missing photos, GIFs, or gifts do not break the layout.
+12. The website works after refreshing and can be hosted as a static website.
+13. There are no console errors, broken interactions, or unfinished visual elements.
+
+### 15. Final Delivery
+
+Deliver the complete, working source code rather than just a visual mockup.
+
+Include:
+
+* All source files.
+* A README with setup and running instructions.
+* An asset replacement guide explaining exactly where to put the background, GIFs, photos, and gift image.
+* A customization guide explaining how to change the proposal question, names, captions, and letter.
+* Instructions for building and deploying the website as a static site, such as GitHub Pages or another compatible host.
+
+**Final objective:** Create a charming, polished, memorable proposal experience that combines a playful cat-GIF interaction with a sincere message of patience and a meaningful celebration if the recipient chooses YES. Make it beautiful, functional, easy to personalize, and reliable on both laptops and phones.
