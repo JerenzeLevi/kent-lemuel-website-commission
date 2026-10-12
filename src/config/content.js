@@ -12,6 +12,18 @@ export const content = {
   // change the name here AND in src/styles/main.css (--bg-image).
   backgroundImage: "/assets/background.jpg",
 
+  // --- Birthday gate (shown first) -------------------------------------------
+  // She must enter the month and day that match below to continue.
+  // Note: this is a light lock for a surprise, not real security. The answer is
+  // visible in the source code.
+  gate: {
+    enabled: true,
+    question: "What's your birth month and day?",
+    month: "June",   // must match one of the month names exactly
+    day: 7,
+    wrongMessage: "Hmm, that's not quite it. Try again 💭",
+  },
+
   // --- Initial proposal screen ----------------------------------------------
   kicker: "Hey, there's something I want to ask you...", // REPLACE: romantic heading
   question: "Jehainne, will you be my Girlfriend?",        // REPLACE: the proposal question

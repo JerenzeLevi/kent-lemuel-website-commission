@@ -33,6 +33,7 @@ const state = {
 // ---------------------------------------------------------------------------
 const $ = (id) => document.getElementById(id);
 const screens = {
+  gate: $("screen-gate"),
   proposal: $("screen-proposal"),
   patience: $("screen-patience"),
   accepted: $("screen-accepted"),
@@ -57,6 +58,48 @@ noBtn.textContent = content.noLabel;
 $("patience-message").textContent = content.patienceMessage;
 $("celebration-heading").textContent = content.celebrationHeading;
 $("celebration-sub").textContent = content.celebrationSubtext;
+
+// ---------------------------------------------------------------------------
+// Birthday gate: month + day must match config before the proposal shows.
+// ---------------------------------------------------------------------------
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+
+function setupGate() {
+  const gate = content.gate;
+  const form = $("gate-form");
+  const monthSel = $("gate-month");
+  const dayInput = $("gate-day");
+  const msg = $("gate-msg");
+
+  $("gate-question").textContent = gate.question;
+  for (const name of MONTHS) {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    monthSel.append(opt);
+  }
+  monthSel.value = "";
+  // Start on an empty placeholder so a month must be chosen on purpose.
+  monthSel.prepend(new Option("Choose…", "", true, true));
+  monthSel.querySelector('option[value=""]').disabled = true;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const day = parseInt(dayInput.value, 10);
+    if (monthSel.value === gate.month && day === gate.day) {
+      msg.textContent = "";
+      showScreen("proposal");
+      layoutButtons();
+      return;
+    }
+    // Wrong answer: say so gently and replay the small shake.
+    msg.textContent = gate.wrongMessage;
+    form.classList.remove("is-wrong");
+    void form.offsetWidth; // restart the animation
+    form.classList.add("is-wrong");
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Screen transitions (the only place screens change)
@@ -312,7 +355,12 @@ new ResizeObserver(() => {
 
 // Initial load. Other GIFs load on demand when their screen appears.
 loadCat(catIdle, catIdleFallback, [content.cats.idle]);
-showScreen("proposal");
+if (content.gate.enabled) {
+  setupGate();
+  showScreen("gate");
+} else {
+  showScreen("proposal");
+}
 layoutButtons();
 installRoseCursor();
 startPetals($("petals"));

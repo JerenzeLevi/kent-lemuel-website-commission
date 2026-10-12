@@ -13,6 +13,26 @@
 
     <main class="app">
       <section class="card" aria-live="polite">
+        <!-- ============ 0. BIRTHDAY GATE (before the proposal) ============ -->
+        <div class="screen" id="screen-gate" hidden>
+          <p class="kicker">Before anything else</p>
+          <h1 class="question" id="gate-question"></h1>
+          <form class="gate-form" id="gate-form" novalidate>
+            <div class="gate-fields">
+              <label class="gate-field">
+                <span>Month</span>
+                <select id="gate-month" required></select>
+              </label>
+              <label class="gate-field">
+                <span>Day</span>
+                <input id="gate-day" type="number" inputmode="numeric" min="1" max="31" placeholder="e.g. 7" required />
+              </label>
+            </div>
+            <button type="submit" class="btn btn-unlock">Unlock</button>
+            <p class="gate-msg" id="gate-msg" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
         <!-- ============ 1. INITIAL PROPOSAL ============ -->
         <div class="screen" id="screen-proposal">
           <div class="cat-frame">
